@@ -61,7 +61,7 @@ sh
 Once the containers are up, you can access the application via:
 
 - Web server: `http://localhost:8080`
-- Database: `jdbc:mysql://localhost:3306/rule_engine`
+- Database: `https://localhost:5432`
 
 ### Without Docker
 
@@ -72,6 +72,13 @@ To run the application locally without Docker:
 3. Start the application using Maven:
    sh
    ./mvnw spring-boot:run
+
+## Table Structures
+
+1.rules table
+![rules table](imagesforreference/rules_table_structure.png)
+2.users table
+![rules table](imagesforreference/users_table_structure.png)
 
 ## Design Choices
 
@@ -119,3 +126,10 @@ The project structure is as follows:
 ## Contributing
 
 Contributions are welcome! Please fork this repository and submit a pull request for review.
+
+## Testing (Postman)
+
+![create rule api testing](imagesforreference/create_rule_api_testing.png)
+![combine rules api testing](imagesforreference/combine_rules_api_testing.png)
+![evaluate rule api testing](imagesforreference/evaluate_rule_api_testing.png)
+![modify rule api testing](imagesforreference/modify_rule_api_testing.png)
