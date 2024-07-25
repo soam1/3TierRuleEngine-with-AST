@@ -1,4 +1,3 @@
-markdown
 
 # 3TierRuleEngine-with-AST
 
@@ -133,3 +132,7 @@ Contributions are welcome! Please fork this repository and submit a pull request
 ![combine rules api testing](imagesforreference/combine_rules_api_testing.png)
 ![evaluate rule api testing](imagesforreference/evaluate_rule_api_testing.png)
 ![modify rule api testing](imagesforreference/modify_rule_api_testing.png)
+
+## test UI (ThymeLeaf)
+![http://localhost:8080/create_rule page](imagesforreference/create_rule_ui.png)
+![http://localhost:8080/evaluate_rule page](imagesforreference/evaluate_rule_ui.png)
