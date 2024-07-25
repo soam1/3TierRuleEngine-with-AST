@@ -42,5 +42,11 @@ public class RuleController {
         return ruleService.evaluateRule(ast, userData);
     }
 
+    @PutMapping("/modify_rule/{ruleId}")
+    public Node modifyRule(@PathVariable Long ruleId, @RequestBody Map<String, String> payload) {
+        String newRuleString = payload.get("newRule");
+        return ruleService.modifyRule(ruleId, newRuleString);
+    }
+
 
 }

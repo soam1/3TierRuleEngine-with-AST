@@ -57,16 +57,40 @@ public class RuleService {
         return newAst;
     }
 
+//    private Node parseRule(String ruleString) {
+//        // Implement the parsing logic here
+//        // Example parsing logic (simplified, replace with actual implementation)
+//        Node root = new Node("operator", "AND");
+//        Node left = new Node("operand", "age > 30");
+//        Node right = new Node("operand", "department = 'Sales'");
+//        root.setLeft(left);
+//        root.setRight(right);
+//        return root;
+//    }
+
     private Node parseRule(String ruleString) {
         // Implement the parsing logic here
-        // Example parsing logic (simplified, replace with actual implementation)
-        Node root = new Node("operator", "AND");
-        Node left = new Node("operand", "age > 30");
-        Node right = new Node("operand", "department = 'Sales'");
-        root.setLeft(left);
-        root.setRight(right);
-        return root;
+        // This is a simplified example. Real parsing logic should handle all cases.
+
+        // Check for AND, OR, and nested structures, and parse accordingly.
+        if (ruleString.contains("AND")) {
+            String[] parts = ruleString.split("AND", 2);
+            Node root = new Node("operator", "AND");
+            root.setLeft(parseRule(parts[0].trim()));
+            root.setRight(parseRule(parts[1].trim()));
+            return root;
+        } else if (ruleString.contains("OR")) {
+            String[] parts = ruleString.split("OR", 2);
+            Node root = new Node("operator", "OR");
+            root.setLeft(parseRule(parts[0].trim()));
+            root.setRight(parseRule(parts[1].trim()));
+            return root;
+        } else {
+            // This assumes the rest are simple conditions; you may need more robust parsing here.
+            return new Node("operand", ruleString.trim());
+        }
     }
+
 
     private Node combine(List<String> ruleStrings) {
         // Implement the combination logic here
