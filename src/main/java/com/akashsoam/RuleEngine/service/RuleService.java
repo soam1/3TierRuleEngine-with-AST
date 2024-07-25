@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 @Service
 public class RuleService {
@@ -18,8 +20,12 @@ public class RuleService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    // Define valid attributes and a basic pattern for rule validation
+    private static final Pattern VALID_RULE_PATTERN = Pattern.compile("^[\\w\\s><=()\\-+'ANDOR]+$");
+    private static final Set<String> VALID_ATTRIBUTES = Set.of("age", "department", "salary", "experience");
+
     public Node createRule(String ruleString) {
-        // Parse ruleString and generate AST
+        validateRuleString(ruleString);
         Node ast = parseRule(ruleString);
         Rule rule = new Rule();
         rule.setRuleString(ruleString);
@@ -29,19 +35,31 @@ public class RuleService {
     }
 
     public Node combineRules(List<String> ruleStrings) {
-        // Combine the rules into a single AST
+        for (String ruleString : ruleStrings) {
+            validateRuleString(ruleString);
+        }
         return combine(ruleStrings);
     }
 
     public boolean evaluateRule(Node ast, Map<String, Object> userData) {
-        // Evaluate the AST against user data
         return evaluate(ast, userData);
+    }
+
+    public Node modifyRule(Long ruleId, String newRuleString) {
+        validateRuleString(newRuleString);
+        Rule existingRule = ruleRepository.findById(ruleId)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
+
+        Node newAst = parseRule(newRuleString);
+        existingRule.setRuleString(newRuleString);
+        existingRule.setAst(convertNodeToJson(newAst));
+        ruleRepository.save(existingRule);
+        return newAst;
     }
 
     private Node parseRule(String ruleString) {
         // Implement the parsing logic here
-        // Example parsing logic
-        // This is a simplified example. You should replace this with a real parser.
+        // Example parsing logic (simplified, replace with actual implementation)
         Node root = new Node("operator", "AND");
         Node left = new Node("operand", "age > 30");
         Node right = new Node("operand", "department = 'Sales'");
@@ -52,8 +70,6 @@ public class RuleService {
 
     private Node combine(List<String> ruleStrings) {
         // Implement the combination logic here
-        // Example combination logic
-        // This is a simplified example. You should replace this with a real combiner.
         Node root = new Node("operator", "OR");
         for (String ruleString : ruleStrings) {
             Node rule = parseRule(ruleString);
@@ -71,8 +87,6 @@ public class RuleService {
 
     private boolean evaluate(Node node, Map<String, Object> userData) {
         // Implement the evaluation logic here
-        // Example evaluation logic
-        // This is a simplified example. You should replace this with a real evaluator.
         if ("operand".equals(node.getType())) {
             String[] parts = ((String) node.getValue()).split(" ");
             String attribute = parts[0];
@@ -103,6 +117,22 @@ public class RuleService {
             }
         }
         return false;
+    }
+
+    private void validateRuleString(String ruleString) {
+        if (!VALID_RULE_PATTERN.matcher(ruleString).matches()) {
+            throw new RuntimeException("Invalid rule format");
+        }
+        validateAttributes(ruleString);
+    }
+
+    private void validateAttributes(String ruleString) {
+        for (String attribute : VALID_ATTRIBUTES) {
+            if (ruleString.contains(attribute)) {
+                return;
+            }
+        }
+        throw new RuntimeException("Invalid attribute used in rule: " + ruleString);
     }
 
     public String convertNodeToJson(Node node) {

@@ -34,13 +34,6 @@ public class RuleController {
     }
 
 
-//    @PostMapping("/evaluate_rule")
-//    public boolean evaluateRule(@RequestBody Map<String, Object> userData, @RequestParam String ast) {
-//        // Convert JSON string to Node object
-//        Node astNode = ruleService.convertJsonToNode(ast);
-//        return ruleService.evaluateRule(astNode, userData);
-//    }
-
     @PostMapping("/evaluate_rule")
     public boolean evaluateRule(@RequestBody Map<String, Object> payload) {
         Map<String, Object> userData = (Map<String, Object>) payload.get("userData");
