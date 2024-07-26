@@ -1,4 +1,3 @@
-
 # 3TierRuleEngine-with-AST
 
 ## Overview
@@ -100,29 +99,29 @@ Docker is used to ensure a consistent and reproducible environment, facilitating
 
 ## Directory Structure
 
+```
 The project structure is as follows:
-
-3TierRuleEngine-with-AST/
+3TierRuleEngine-with-AST/ 
 ├── .mvn/ # Maven wrapper files
 ├── src/ # Source code
-│ ├── main/
+│ ├── main/ # Main source directory
 │ │ ├── java/ # Java source files
-│ │ │ ├── com/akashsoam/RuleEngine/
-│ │ │ │ ├── RuleEngineApplication.java
-│ │ │ │ ├── controller/
-│ │ │ │ │ └── RuleController.java
-│ │ │ │ ├── model/ # Model classes
-│ │ │ │ └── service/ # Service classes
-│ │ └── resources/ # Application resources
-│ │ └── application.properties
-│ └── test/ # Test source files
-├── .gitignore # Git ignore file
-├── mvnw # Maven wrapper script
+│ │ │ └── com/akashsoam/RuleEngine/ 
+│ │ │ ├── RuleEngineApplication.java # Main application class
+│ │ │ ├── controller/
+│ │ │ │ └── RuleController.java # Controller class for handling rule requests
+│ │ │ ├  ├── other controllers for web pages # Controller class for handling rule requests
+│ │ │ ├── model/ # Model classes (domain objects)
+│ │ │ └── service/ # Service classes (business logic)
+│ └── resources/ # Application resources
+│ └── application.properties # Configuration properties
+├── test/ # Test source files (unit and integration tests)
+├── .gitignore # Git ignore file (specifies files to exclude from version control)
+├── mvnw # Maven wrapper script (cross-platform)
 ├── mvnw.cmd # Maven wrapper script for Windows
-├── pom.xml # Maven project file
-└── README.md # Project README
-
-## Contributing
+└── pom.xml # Maven project file
+└── README.md # Project README (this file)
+```
 
 Contributions are welcome! Please fork this repository and submit a pull request for review.
 
@@ -134,5 +133,30 @@ Contributions are welcome! Please fork this repository and submit a pull request
 ![modify rule api testing](imagesforreference/modify_rule_api_testing.png)
 
 ## test UI (ThymeLeaf)
+
 ![http://localhost:8080/create_rule page](imagesforreference/create_rule_ui.png)
 ![http://localhost:8080/evaluate_rule page](imagesforreference/evaluate_rule_ui.png)
+
+## Combined Rules Test Cases
+
+### Test Cases
+
+1. **Combine Two Simple Rules**:
+    - Combines two simple rules and checks if the combined rule is valid.
+2. **Combine Multiple Rules**:
+    - Combines multiple rules and checks if the combined rule is valid.
+3. **Combine Rules with Conflicting Conditions**:
+    - Combines rules with conflicting conditions and checks if the combined rule is valid.
+4. **Combine Rules with Nested Conditions**:
+    - Combines rules with nested conditions and checks if the combined rule is valid.
+5. **Combine Rules with Invalid Syntax**:
+    - Attempts to combine rules with invalid syntax and expects a `SyntaxException`.
+
+### Known Issues
+
+- **Conflicting Conditions**:
+    - Combining rules with conflicting conditions may lead to unexpected behavior.
+- **Invalid Syntax**:
+    - Rules with invalid syntax will cause the combination process to fail.
+- **Complex Nested Conditions**:
+    - Combining rules with complex nested conditions may not always produce the expected results.
