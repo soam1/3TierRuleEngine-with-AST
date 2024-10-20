@@ -75,8 +75,10 @@ To run the application locally without Docker:
 
 1.rules table
 ![rules table](imagesforreference/rules_table_structure.png)
+<!--
 2.users table
 ![rules table](imagesforreference/users_table_structure.png)
+-->
 
 ## Design Choices
 
@@ -113,6 +115,7 @@ The project structure is as follows:
 │ │ │ ├  ├── other controllers for web pages # Controller class for handling rule requests
 │ │ │ ├── model/ # Model classes (domain objects)
 │ │ │ └── service/ # Service classes (business logic)
+| | | └── WebConfiguration #spring mvc web configurer
 │ └── resources/ # Application resources
 │ └── application.properties # Configuration properties
 ├── test/ # Test source files (unit and integration tests)
@@ -132,10 +135,12 @@ Contributions are welcome! Please fork this repository and submit a pull request
 ![evaluate rule api testing](imagesforreference/evaluate_rule_api_testing.png)
 ![modify rule api testing](imagesforreference/modify_rule_api_testing.png)
 
+<!--
 ## test UI (ThymeLeaf)
 
 ![http://localhost:8080/create_rule page](imagesforreference/create_rule_ui.png)
 ![http://localhost:8080/evaluate_rule page](imagesforreference/evaluate_rule_ui.png)
+-->
 
 ## Combined Rules Test Cases
 
@@ -154,7 +159,7 @@ Contributions are welcome! Please fork this repository and submit a pull request
 
 ### Known Issues
 
-- **Conflicting Conditions**:
+- **Conflicting Conditions**:      
     - Combining rules with conflicting conditions may lead to unexpected behavior.
 - **Invalid Syntax**:
     - Rules with invalid syntax will cause the combination process to fail.
