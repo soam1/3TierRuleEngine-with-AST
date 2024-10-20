@@ -1,9 +1,10 @@
 package com.akashsoam.RuleEngine.controller;
 
-import com.akashsoam.RuleEngine.model.Node;
+import com.akashsoam.RuleEngine.model.Rule;
 import com.akashsoam.RuleEngine.service.RuleService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,42 +12,53 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/rules")
 public class RuleController {
 
     @Autowired
     private RuleService ruleService;
 
-    //    @PostMapping("/create_rule")
-//    public Node createRule(@RequestParam String rule) {
-//        return ruleService.createRule(rule);
-//    }
-    @PostMapping("/create_rule")
-    public Node createRule(@RequestBody Map<String, String> payload) {
-        String ruleString = payload.get("rule");
-        return ruleService.createRule(ruleString);
+
+    // Create Rule Endpoint
+    @PostMapping("/create")
+    public ResponseEntity<?> createRule(@RequestBody Map<String, String> request) {
+        try {
+            String ruleName = request.get("ruleName");
+            String ruleString = request.get("ruleString");
+            Rule rule = ruleService.createRule(ruleName, ruleString);
+            return ResponseEntity.ok(rule);  // Return 200 OK with the created rule
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error creating rule: " + e.getMessage());  // Return 400 with error message
+        }
     }
 
-
-    @PostMapping("/combine_rules")
-    public Node combineRules(@RequestBody List<String> rules) {
-        return ruleService.combineRules(rules);
+    // Combine Rules Endpoint
+    @PostMapping("/combine")
+    public ResponseEntity<?> combineRules(@RequestBody Map<String, Object> request) {
+        try {
+            Long ruleId1 = Long.parseLong(request.get("ruleId1").toString());
+            Long ruleId2 = Long.parseLong(request.get("ruleId2").toString());
+            String operator = request.get("operator").toString();
+            Rule combinedRule = ruleService.combineRules(ruleId1, ruleId2, operator);
+            return ResponseEntity.ok(combinedRule);  // Return 200 OK with the combined rule
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error combining rules: " + e.getMessage());  // Return 400 with error message
+        }
     }
 
-
-    @PostMapping("/evaluate_rule")
-    public boolean evaluateRule(@RequestBody Map<String, Object> payload) {
-        Map<String, Object> userData = (Map<String, Object>) payload.get("userData");
-        ObjectMapper objectMapper = new ObjectMapper();
-        Node ast = objectMapper.convertValue(payload.get("ast"), Node.class);
-        return ruleService.evaluateRule(ast, userData);
+    // Evaluate Rule Endpoint
+    @PostMapping("/evaluate")
+    public ResponseEntity<?> evaluateRule(@RequestBody Map<String, Object> request) {
+        try {
+            Long ruleId = Long.parseLong(request.get("ruleId").toString());
+            Map<String, Object> userData = (Map<String, Object>) request.get("userData");
+            boolean result = ruleService.evaluateRule(ruleId, userData);
+            return ResponseEntity.ok(result);  // Return 200 OK with the evaluation result
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error evaluating rule: " + e.getMessage());  // Return 400 with error message
+        }
     }
-
-    @PutMapping("/modify_rule/{ruleId}")
-    public Node modifyRule(@PathVariable Long ruleId, @RequestBody Map<String, String> payload) {
-        String newRuleString = payload.get("newRule");
-        return ruleService.modifyRule(ruleId, newRuleString);
-    }
-
-
 }

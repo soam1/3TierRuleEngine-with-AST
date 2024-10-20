@@ -1,7 +1,15 @@
 package com.akashsoam.RuleEngine.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "rules")
 public class Rule {
@@ -10,47 +18,13 @@ public class Rule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "rule_name")
+    private String ruleName;
 
-    @Column(nullable = false)
-    private String type = "operator";  // ensure a default value is set
+    @Lob
+    @Column(name = "rule_ast", columnDefinition = "TEXT")
+    private String ruleAST;  // JSON string representation of the Node (AST)
 
-    @Column(name = "rule_string", nullable = false)
-    private String ruleString;
-
-    @Column(name = "ast", columnDefinition = "json")
-    private String ast;
-
-
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRuleString() {
-        return ruleString;
-    }
-
-    public void setRuleString(String ruleString) {
-        this.ruleString = ruleString;
-    }
-
-    public String getAst() {
-        return ast;
-    }
-
-    public void setAst(String ast) {
-        this.ast = ast;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

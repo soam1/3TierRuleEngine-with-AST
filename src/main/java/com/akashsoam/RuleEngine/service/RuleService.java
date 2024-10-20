@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.Stack;
+import java.util.StringTokenizer;
 
 @Service
 public class RuleService {
@@ -68,32 +70,90 @@ public class RuleService {
 //        return root;
 //    }
 
-    private Node parseRule(String ruleString) {
-        // Implement the parsing logic here
-        // This is a simplified example. Real parsing logic should handle all cases.
+//    private Node parseRule(String ruleString) {
+//        // the parsing logic here
+//        // This is a simplified example. Real parsing logic should handle all cases.
+//
+//        // Check for AND, OR, and nested structures, and parse accordingly.
+//        if (ruleString.contains("AND")) {
+//            String[] parts = ruleString.split("AND", 2);
+//            Node root = new Node("operator", "AND");
+//            root.setLeft(parseRule(parts[0].trim()));
+//            root.setRight(parseRule(parts[1].trim()));
+//            return root;
+//        } else if (ruleString.contains("OR")) {
+//            String[] parts = ruleString.split("OR", 2);
+//            Node root = new Node("operator", "OR");
+//            root.setLeft(parseRule(parts[0].trim()));
+//            root.setRight(parseRule(parts[1].trim()));
+//            return root;
+//        } else {
+//            // This assumes the rest are simple conditions; you may need more robust parsing here.
+//            return new Node("operand", ruleString.trim());
+//        }
+//    }
 
-        // Check for AND, OR, and nested structures, and parse accordingly.
-        if (ruleString.contains("AND")) {
-            String[] parts = ruleString.split("AND", 2);
-            Node root = new Node("operator", "AND");
-            root.setLeft(parseRule(parts[0].trim()));
-            root.setRight(parseRule(parts[1].trim()));
-            return root;
-        } else if (ruleString.contains("OR")) {
-            String[] parts = ruleString.split("OR", 2);
-            Node root = new Node("operator", "OR");
-            root.setLeft(parseRule(parts[0].trim()));
-            root.setRight(parseRule(parts[1].trim()));
-            return root;
-        } else {
-            // This assumes the rest are simple conditions; you may need more robust parsing here.
-            return new Node("operand", ruleString.trim());
+
+    public Node parseRule(String ruleString) {
+        Stack<Node> nodes = new Stack<>();
+        Stack<String> operators = new Stack<>();
+        StringTokenizer tokenizer = new StringTokenizer(ruleString, " ()", true);
+
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken().trim();
+            if (token.isEmpty()) continue;
+
+            switch (token) {
+                case "(":
+                    operators.push(token);
+                    break;
+                case ")":
+                    while (!operators.isEmpty() && !operators.peek().equals("(")) {
+                        nodes.push(createNode(operators.pop(), nodes.pop(), nodes.pop()));
+                    }
+                    operators.pop(); // Remove the "("
+                    break;
+                case "AND":
+                case "OR":
+                    while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(token)) {
+                        nodes.push(createNode(operators.pop(), nodes.pop(), nodes.pop()));
+                    }
+                    operators.push(token);
+                    break;
+                default:
+                    nodes.push(new Node("operand", token));
+                    break;
+            }
         }
+
+        while (!operators.isEmpty()) {
+            nodes.push(createNode(operators.pop(), nodes.pop(), nodes.pop()));
+        }
+
+        return nodes.pop();
+    }
+
+    private int precedence(String operator) {
+        switch (operator) {
+            case "AND":
+                return 2;
+            case "OR":
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
+    private Node createNode(String operator, Node right, Node left) {
+        Node node = new Node("operator", operator);
+        node.setLeft(left);
+        node.setRight(right);
+        return node;
     }
 
 
     private Node combine(List<String> ruleStrings) {
-        // Implement the combination logic here
+        // the combination logic here
         Node root = new Node("operator", "OR");
         for (String ruleString : ruleStrings) {
             Node rule = parseRule(ruleString);
@@ -110,7 +170,7 @@ public class RuleService {
     }
 
     private boolean evaluate(Node node, Map<String, Object> userData) {
-        // Implement the evaluation logic here
+        // the evaluation logic here
         if ("operand".equals(node.getType())) {
             String[] parts = ((String) node.getValue()).split(" ");
             String attribute = parts[0];
@@ -141,6 +201,32 @@ public class RuleService {
             }
         }
         return false;
+    }
+
+    private boolean evaluate2(Node node, Map<String, Object> userDate){
+        Stack<Node> nodes = new Stack<>();
+    }
+
+    Node evaluate(Node node){
+//        if(node.left==null && node.right)return false;
+
+//        Node opeartator = node.getValue()
+//        Node left = node.getLeft(), right = node.getRight();
+//        if (!node.left.getType().equals("operand")){
+//            left = evaluate((node.left));
+//        }
+//
+//        if (!node.right.getType().equals("operand")) {
+//            right =evaluate((node.right));
+//        }
+//        return left node.getValue() right;
+
+        //leaf
+        if(node.getLeft()==null && node.getRight()==null) {
+            return node.getValue();
+        }
+//            return evaluate(node.left).getValue() node.getValue() evaluate(node.right).getValue();
+            return evaluate(node.left).getValue() || evaluate(node.right).getValue();
     }
 
     private void validateRuleString(String ruleString) {
