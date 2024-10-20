@@ -12,7 +12,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/rules")
+@RequestMapping("/ruleEngine")
 public class RuleController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class RuleController {
 
 
     // Create Rule Endpoint
-    @PostMapping("/create")
+    @PostMapping("/create-rule")
     public ResponseEntity<?> createRule(@RequestBody Map<String, String> request) {
         try {
             String ruleName = request.get("ruleName");
@@ -34,7 +34,7 @@ public class RuleController {
     }
 
     // Combine Rules Endpoint
-    @PostMapping("/combine")
+    @PostMapping("/combine-rules")
     public ResponseEntity<?> combineRules(@RequestBody Map<String, Object> request) {
         try {
             Long ruleId1 = Long.parseLong(request.get("ruleId1").toString());
@@ -49,7 +49,7 @@ public class RuleController {
     }
 
     // Evaluate Rule Endpoint
-    @PostMapping("/evaluate")
+    @PostMapping("/evaluate-rule")
     public ResponseEntity<?> evaluateRule(@RequestBody Map<String, Object> request) {
         try {
             Long ruleId = Long.parseLong(request.get("ruleId").toString());
