@@ -38,4 +38,8 @@ public class RuleEngineApplicationTests {
 //        assertTrue(ruleService.evaluateRule(ast, userData1));
 //        assertFalse(ruleService.evaluateRule(ast, userData2));
     }
+
+    @Test
+    void contextLoads() {
+    }
 }
