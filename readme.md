@@ -74,7 +74,7 @@ To run the application locally without Docker:
 ## Table Structures
 
 1.rules table
-![rules table](imagesforreference/rules_table.png)
+![rules table](imagesforreference/rule_table.png)
 <!--
 2.users table
 ![rules table](imagesforreference/users_table_structure.png)
