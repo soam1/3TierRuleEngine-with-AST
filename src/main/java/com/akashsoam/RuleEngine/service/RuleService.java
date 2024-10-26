@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -120,5 +121,9 @@ public class RuleService {
             default:
                 return false;
         }
+    }
+
+    public List<Rule> getAllRules() {
+        return ruleRepository.findAll();
     }
 }

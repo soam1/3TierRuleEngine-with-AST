@@ -61,4 +61,15 @@ public class RuleController {
                     .body("Error evaluating rule: " + e.getMessage());  // Return 400 with error message
         }
     }
+
+    @GetMapping("/get-all-rules")
+    public ResponseEntity<?> getAllRules() {
+        try {
+            List<Rule> allRules = ruleService.getAllRules();
+            return ResponseEntity.ok(allRules);  // Return 200 OK with the list of all rules
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error retrieving rules: " + e.getMessage());  // Return 500 with error message
+        }
+    }
 }
